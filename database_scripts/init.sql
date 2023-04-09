@@ -1,4 +1,8 @@
-CREATE DATABASE service_db;
+SET global general_log = on;
+SET global general_log_file='/var/log/mysql/mysql.log';
+SET global log_output = 'file';
+
+USE service_db;
 
 /* Creating tables 
    21 tables in total */
@@ -54,7 +58,8 @@ CREATE TABLE Company (
     company_id int NOT NULL AUTO_INCREMENT,
     company_name varchar(255),
     company_website varchar(255),
-    company_phone_number varchar(255)
+    company_phone_number varchar(255),
+    PRIMARY KEY (company_id)
 );
 CREATE TABLE DeviceType (
     device_type_id int NOT NULL AUTO_INCREMENT,
@@ -87,17 +92,17 @@ CREATE TABLE Component (
 CREATE TABLE BatteryType (
     battery_type_id int NOT NULL AUTO_INCREMENT,
     battery_type_name varchar(255),
-    PRIMARY KEY (battery_id)
+    PRIMARY KEY (battery_type_id)
 );
 CREATE TABLE CableType (
     cable_type_id int NOT NULL AUTO_INCREMENT,
     cable_type_name varchar(255),
-    PRIMARY KEY (cable_id)
+    PRIMARY KEY (cable_type_id)
 );
 CREATE TABLE DisplayType (
     display_type_id int NOT NULL AUTO_INCREMENT,
     display_type_name varchar(255),
-    PRIMARY KEY (display_id)
+    PRIMARY KEY (display_type_id)
 );
 CREATE TABLE Battery (
     battery_id int NOT NULL,
@@ -130,7 +135,7 @@ CREATE TABLE OrderStatus (
     order_status_name varchar(255),
     PRIMARY KEY (order_status_id)
 );
-CREATE TABLE Order (
+CREATE TABLE Orders (
     order_id int NOT NULL AUTO_INCREMENT,
     employee_id int,
     client_id int,
@@ -142,7 +147,7 @@ CREATE TABLE Order (
     FOREIGN KEY (employee_id) REFERENCES Employee(employee_id),
     FOREIGN KEY (client_id) REFERENCES Client(client_id),
     FOREIGN KEY (device_id) REFERENCES Device(device_id),
-    FOREIGN KEY (order_status_id) REFERENCES OrderStatus(order_status_id),
+    FOREIGN KEY (order_status_id) REFERENCES OrderStatus(order_status_id)
 );
 CREATE TABLE Feedback (
     feedback_id int NOT NULL AUTO_INCREMENT,
@@ -150,13 +155,13 @@ CREATE TABLE Feedback (
     feedback_rating int,
     feedback_text varchar(255),
     PRIMARY KEY (feedback_id),
-    FOREIGN KEY (order_id) REFERENCES Order(order_id)
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id)
 );
 CREATE TABLE WorksInOrders (
     order_id int,
     work_id int,
     PRIMARY KEY (order_id, work_id),
-    FOREIGN KEY (order_id) REFERENCES Order(order_id),
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id),
     FOREIGN KEY (work_id) REFERENCES Work(work_id)
 );
 CREATE TABLE ComponentsInWork (

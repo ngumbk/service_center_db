@@ -6,9 +6,18 @@ services:
       - "3306:3306"
     restart: always
     environment:
+      MYSQL_DATABASE: "service_db"
       MYSQL_ROOT_PASSWORD: "123456"
     volumes:
-      - ./db_mysql_data:/var/lib/mysql
+      - "./db_mysql_data:/var/lib/mysql"
+      - "./mysql_logs:/var/log/mysql"
+      - "./database_scripts/init.sql:/docker-entrypoint-initdb.d/1.sql"
+
+  # db_mongo:
+  #   image: mongo
+  #   restart: always
+  #   environment:
+  #     - MONGO_INITDB_ROOT_USERNAME=root
+  #     - MONGO_INITDB_ROOT_PASSWORD=123456
 volumes:
-  db_mysql_data:
-    external: true
+  db_mysql_data: #external: true
